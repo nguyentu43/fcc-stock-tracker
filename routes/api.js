@@ -36,13 +36,21 @@ const api = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&int
 
 function getPrice(symbol)
 {
-  return request({uri: api + '&symbol=' + symbol, json: true}).then((res) => {
-    if(res['Error Message'])
-      return {result: false, name: symbol};
-    else {
-      return {result: Object.entries(res['Time Series (5min)'])[0][1]["1. open"], name: symbol };
-    }
+  
+  return new Promise((resolve) => {
+    
+    setTimeout(() => {
+      
+      request({uri: api + '&symbol=' + symbol, json: true}).then((res) => {
+        if(res['Error Message'])
+          resolve({result: false, name: symbol});
+        else resolve({result: Object.entries(res['Time Series (5min)'])[0][1]["1. open"], name: symbol });
+      });
+      
+    }, 30 * 1000);
+    
   });
+  
 }
 
 function getStockAndLike(data, like, req){
