@@ -54,7 +54,7 @@ module.exports = function (app) {
     
       let stock = Array.isArray(req.query.stock) ? req.query.stock : [req.query.stock];
       const like = req.query.like === 'true' ? true : false;
-      stock = stock.map(stock => stock.toLowerCase());
+      stock = stock.map(stock => stock.toUpperCase());
     
       if(stock.length == 1)
         {
@@ -62,10 +62,9 @@ module.exports = function (app) {
           .then((data) => {
             if(!data.result) return res.send('stock not found');
             
-            Stock.findOneAndUpdate({stock: stock[0]}, { $set: { price: data.result } }, {upsert: true}, function(err, stock){
+            Stock.findOneAndUpdate({stock: stock[0]}, { $set: { price: data.result, likes: [] }}, {new: true, upsert: true}, function(err, stock){
               
               if(err) return res.send('mongodb error');
-              if(!Array.isArray(stock.likes)) stock.likes = [];
               if(like && stock.likes.indexOf(req.clientIp) == -1)
                 {
                   stock.likes.push(req.clientIp);
@@ -74,15 +73,20 @@ module.exports = function (app) {
                     return res.json(stock.toJSON());
                   })
                 }
-                
-              res.json(stock.toJSON());
-              
+              else res.json(stock.toJSON());
             });
           })
         }
       else 
         {
-          
+          Promise.all(getPrice(stock[0], getPrice(stock[1])))
+          .then(([stock1, stock2]) => {
+            
+            if(!stock1.result || !stock2.result)
+              return res.send('stock not found');
+            
+            Stock.findOneAndUpdate({})
+          })
         }
     
     });
