@@ -7,6 +7,7 @@ dependencies:
   helmet: 3.18.0
   mocha: 6.1.4
   mongodb: 3.2.7
+  mongoose: 5.6.0
   request: 2.88.0
   request-promise: 4.2.4
   zombie: 6.1.4
@@ -145,6 +146,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-jp/uFnooOiO+L211eZOoSyzpOITMXx1rBITauYykG3BRYPu8h0UcxsPNB04RR5vo4Tyz3+ay17tR6JVf9qzYWg==
+  /async/2.6.2:
+    dependencies:
+      lodash: 4.17.11
+    dev: false
+    resolution:
+      integrity: sha512-H1qVYh1MYhEEFLsP97cVKqCGo7KfCyTt6uEWqsTBr9SO84oK9Uwbyd/yCW+6rKJLHksBNUVWZDAjfS+Ccx0Bbg==
   /asynckit/0.4.0:
     dev: false
     resolution:
@@ -174,6 +181,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-pDAdOJtqQ/m2f/PKEaP2Y342Dp4=
+  /bluebird/3.5.1:
+    dev: false
+    resolution:
+      integrity: sha512-MKiLiV+I1AA596t9w1sQJ8jkiSr5+ZKi0WKrYGUn6d1Fx+Ij4tIj+m2WMQSGczs5jZVxV339chE8iwk6F64wjA==
   /bluebird/3.5.5:
     dev: false
     resolution:
@@ -415,6 +426,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
+  /debug/3.1.0:
+    dependencies:
+      ms: 2.0.0
+    dev: false
+    resolution:
+      integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
   /debug/3.2.6:
     dependencies:
       ms: 2.1.2
@@ -1141,6 +1158,10 @@ packages:
       '0': node >=0.6.0
     resolution:
       integrity: sha1-MT5mvB5cwG5Di8G3SZwuXFastqI=
+  /kareem/2.3.0:
+    dev: false
+    resolution:
+      integrity: sha512-6hHxsp9e6zQU8nXsP+02HGWXwTkOEw6IROhF2ZA28cYbUk4eJ6QbtZvdqZOdD9YPKghG3apk5eOCvs+tLl3lRg==
   /lcid/2.0.0:
     dependencies:
       invert-kv: 2.0.0
@@ -1328,6 +1349,50 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-2YdWrdf1PJgxcCrT1tWoL6nHuk6hCxhddAAaEh8QJL231ci4+P9FLyqopbTm2Z2sAU6mhCri+wd9r1hOcHdoMw==
+  /mongoose-legacy-pluralize/1.0.2:
+    dev: false
+    peerDependencies:
+      mongoose: '*'
+    resolution:
+      integrity: sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
+  /mongoose/5.6.0:
+    dependencies:
+      async: 2.6.2
+      bson: 1.1.1
+      kareem: 2.3.0
+      mongodb: 3.2.7
+      mongodb-core: 3.2.7
+      mongoose-legacy-pluralize: 1.0.2
+      mpath: 0.6.0
+      mquery: 3.2.1
+      ms: 2.1.2
+      regexp-clone: 1.0.0
+      safe-buffer: 5.1.2
+      sift: 7.0.1
+      sliced: 1.0.1
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-bhevx8u4NfZf2Un+CcKWRsiNekrLH7dSI8mBC49FcY2SUXQPZf3w+Yby+cgDrpZA46nkqRW9Qaqhs7PT0XCtYQ==
+  /mpath/0.6.0:
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-i75qh79MJ5Xo/sbhxrDrPSEG0H/mr1kcZXJ8dH6URU5jD/knFxCVqVC/gVSW7GIXL/9hHWlT9haLbCXWOll3qw==
+  /mquery/3.2.1:
+    dependencies:
+      bluebird: 3.5.1
+      debug: 3.1.0
+      regexp-clone: 1.0.0
+      safe-buffer: 5.1.2
+      sliced: 1.0.1
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-kY/K8QToZWTTocm0U+r8rqcJCp5PRl6e8tPmoDs5OeSO3DInZE2rAL6AYH+V406JTo8305LdASOQcxRDqHojyw==
   /ms/2.0.0:
     dev: false
     resolution:
@@ -1643,6 +1708,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
+  /regexp-clone/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha512-TuAasHQNamyyJ2hb97IuBEif4qBHGjPHBS64sZwytpLEqtBQ1gPJTnOaQ6qmpET16cK14kkjbazl6+p0RRv0yw==
   /request-promise-core/1.1.2:
     dependencies:
       lodash: 4.17.11
@@ -1829,10 +1898,18 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-2kL0l0DAtC2yypcoVxyxkMmO/qM=
+  /sift/7.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-oqD7PMJ+uO6jV9EQCl0LrRw1OwsiPsiFQR5AR30heR+4Dl7jBBbDLnNvWiak20tzZlSE1H7RB30SX/1j/YYT7g==
   /signal-exit/3.0.2:
     dev: false
     resolution:
       integrity: sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
+  /sliced/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha1-CzpmK10Ewxd7GSa+qCsD+Dei70E=
   /source-map/0.6.1:
     dev: false
     engines:
@@ -2291,6 +2368,7 @@ specifiers:
   helmet: ^3.18.0
   mocha: ^6.1.4
   mongodb: ^3.2.6
+  mongoose: ^5.5.12
   request: ^2.88.0
   request-promise: ^4.2.4
   zombie: ^6.1.4

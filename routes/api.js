@@ -9,19 +9,32 @@
 'use strict';
 
 var expect = require('chai').expect;
-var MongoClient = require('mongodb');
+const mongoose = require('mongoose');
 const request = require('request-promise');
 
 const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});
+mongoose.connect(CONNECTION_STRING);
+
+const schema = mongoose.Schema({
+  stock: {
+    type: String,
+    required: true
+  },
+  price: Number,
+  likes [ String ]
+});
+
+const Stock = mongoose.model('Stock', schema);
+
 const api = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&apikey=' + process.env.APIKEY_AV;
 
 function getPrice(symbol)
 {
   return request({uri: api + '&symbol=' + symbol, json: true}).then((res) => {
     if(res['Error Message'])
-      return {[symbol]: false};
+      return {result: false, stock: symbol};
     else {
-      return {[symbol]: Object.entries(res['Time Series (5min)'])[0][1]["1. open"] };
+      return {result: Object.entries(res['Time Series (5min)'])[0][1]["1. open"], stock: symbol };
     }
   });
 }
@@ -33,10 +46,23 @@ module.exports = function (app) {
     
       if(!req.body.stock) res.send('stock required');
     
-      const stock = Array.isArray(req.query.stock) ? req.query.stock : [req.query.stock];
+      let stock = Array.isArray(req.query.stock) ? req.query.stock : [req.query.stock];
       const like = req.query.like === 'true' ? true : false;
+      stock = stock.map(stock => stock.toLowerCase());
     
-      if(stock)
+      if(stock.length == 1)
+        {
+          getPrice(stock[0])
+          .then()
+          Stock.findOne({stock: stock[0]}, function(err, stock){
+            if(err) return res.send('mongodb error');
+            
+          });
+        }
+      else 
+        {
+          
+        }
     
     });
     
