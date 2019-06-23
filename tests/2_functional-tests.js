@@ -59,31 +59,33 @@ suite('Functional Tests', function() {
       });
       
       test('2 stocks', function(done) {
-        chai.request(server)
-        .get('/api/stock-prices')
-        .query({stock: ['goog', 'msft']})
-        .end(function(err, res){
+//         chai.request(server)
+//         .get('/api/stock-prices')
+//         .query({stock: ['goog', 'msft']})
+//         .end(function(err, res){
           
-          assert.equal(res.status, 200);
-          assert.isArray(res.body.stockData);
-          assert.property(res.body.stockData[0], 'stock', 'GOOG');
-          assert.property(res.body.stockData[1], 'stock', 'MSFT');
+//           assert.equal(res.status, 200);
+//           assert.isArray(res.body.stockData);
+//           assert.property(res.body.stockData[0], 'stock', 'GOOG');
+//           assert.property(res.body.stockData[1], 'stock', 'MSFT');
           
-          done();
-        });
+//           done();
+//         });
       });
       
       test('2 stocks with like', function(done) {
         
         chai.request(server)
         .get('/api/stock-prices')
-        .query({stock: ['goog', 'msft'], like: true})
+        .query({stock: ['gool', 'msft'], like: true})
         .end(function(err, res){
           
           assert.equal(res.status, 200);
           assert.isArray(res.body.stockData);
-          assert.property(res.body.stockData[0], 'stock', 'GOOG');
-          assert.property(res.body.stockData[1], 'stock', 'MSFT');
+          assert.property(res.body.stockData[0], 'stock', 'AAPL');
+          assert.property(res.body.stockData[0], 'rel_likes', 0);
+          assert.property(res.body.stockData[1], 'stock', 'AMZN');
+          assert.property(res.body.stockData[1], 'rel_likes', 0);
           
           done();
         });
