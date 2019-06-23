@@ -45,16 +45,17 @@ function getPrice(symbol)
   });
 }
 
-function getStockAndLike(stock, like){
-  Stock.findOneAndUpdate({stock}, { $set: { price: data.result, likes: [] }}, {new: true, upsert: true})
+function getStockAndLike(data, like, req){
+  Stock.findOneAndUpdate({stock: data.name}, { $set: { price: data.result, likes: [] }}, {new: true, upsert: true})
   .then((stock) => {
-    if(like && stock.likes.indexOf(req.clientIp) == -1)
+    if(like && stock.likes.indexOf(req.clientIp) === -1)
       {
         stock.likes.push(req.clientIp);
         return stock.save();
       }
     else
       return stock;
+  });
 }
 
 module.exports = function (app) {
@@ -73,11 +74,10 @@ module.exports = function (app) {
           getPrice(stock[0])
           .then((data) => {
               if(!data.result) return res.send('stock not found');
-              return getStock(stock[0], like);
+              return getStockAndLike(stock[0], like, req);
             })
-            .then(stock => res.json(stock.toJSON()))
-            .catch(() => res.send('mongodb error'));
-          })
+          .then(stock => console.log(stock))
+          .catch((err) => res.send(err.message));
         }
       else 
         {
@@ -86,9 +86,13 @@ module.exports = function (app) {
             
             if(!stock1.result || !stock2.result)
               return res.send('stock not found');
-            return Promise.all(getStock(stock[0], like), getStock(stock[1], like));
+            return Promise.all(getStockAndLike(stock[0], like), getStockAndLike(stock[1], like));
           })
-          .then(([stock1, r_stock2]))
+          .then(([r_stock1, r_stock2]) => {
+            
+            res.json([r_stock1.toJSON(), r_stock2.toJSON()]);
+            
+          })
         }
     
     });
