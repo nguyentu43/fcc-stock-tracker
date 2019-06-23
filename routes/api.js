@@ -46,7 +46,11 @@ function getPrice(symbol)
 }
 
 function getStockAndLike(data, like, req){
-  return Stock.findOneAndUpdate({stock: data.name}, { $set: { price: data.result, likes: [] }}, {new: true, upsert: true})
+  return Stock.findOne({ stock: data.name} )
+  .then((stock) => {
+    if(!stock) return (new Stock({ stock: data.name, price: data.result })).save();
+    return stock;
+  })
   .then((stock) => {
     if(like && stock.likes.indexOf(req.clientIp) === -1)
       {
@@ -76,7 +80,7 @@ module.exports = function (app) {
               if(!data.result) return res.send('stock not found');
               getStockAndLike(data, like, req).then(stock => res.json({stockData: stock}));
             })
-          .catch(() => res.send('mongodb error'));
+          .catch((err) => res.send(err.message));
         }
       else 
         {
@@ -97,6 +101,7 @@ module.exports = function (app) {
             });
             
           })
+          .catch((err) => res.send(err.message));
         }
     
     });
