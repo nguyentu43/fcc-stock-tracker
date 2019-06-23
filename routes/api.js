@@ -74,9 +74,9 @@ module.exports = function (app) {
           getPrice(stock[0])
           .then((data) => {
               if(!data.result) return res.send('stock not found');
-              return getStockAndLike(stock[0], like, req);
+              return getStockAndLike(data, like, req);
             })
-          .then(stock => console.log(stock))
+          .then(stock => res.json(stock.toJSON()))
           .catch((err) => res.send(err.message));
         }
       else 
