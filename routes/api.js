@@ -26,16 +26,17 @@ function getPrice(symbol)
   });
 }
 
-getPrice('MSFT').then((res) => console.log(res));
-
 module.exports = function (app) {
 
   app.route('/api/stock-prices')
     .get(function (req, res){
-      const stock = req.query.stock;
-      const like = req.body.like;
     
-      res.json(stock);
+      if(!req.body.stock) res.send('stock required');
+    
+      const stock = Array.isArray(req.query.stock) ? req.query.stock : [req.query.stock];
+      const like = req.query.like === 'true' ? true : false;
+    
+      if(stock)
     
     });
     
