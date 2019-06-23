@@ -5,6 +5,7 @@ var bodyParser  = require('body-parser');
 var expect      = require('chai').expect;
 var cors        = require('cors');
 const helmet   = require('helmet');
+const requestIp = require('request-ip');
 
 var apiRoutes         = require('./routes/api.js');
 var fccTestingRoutes  = require('./routes/fcctesting.js');
@@ -19,6 +20,8 @@ app.use(helmet.contentSecurityPolicy({
     scriptSrc: ["'self'"]
   }
 }));
+
+app.use(requestIp.mw());
 
 app.use('/public', express.static(process.cwd() + '/public'));
 

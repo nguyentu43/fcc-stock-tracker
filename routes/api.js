@@ -22,7 +22,7 @@ const schema = mongoose.Schema({
   },
   price: Number,
   likes: [ String ]
-});
+}, {versionKey: false});
 
 schema.methods.toJSON = function(){
   const obj = this.toObject();
@@ -62,19 +62,20 @@ module.exports = function (app) {
           .then((data) => {
             if(!data.result) return res.send('stock not found');
             
-            Stock.findOneAndUpdate({stock: stock[0]}, { $set: { price: res.result } }, {upsert: true}, function(err, stock){
+            Stock.findOneAndUpdate({stock: stock[0]}, { $set: { price: data.result } }, {upsert: true}, function(err, stock){
               
               if(err) return res.send('mongodb error');
-              if(like && stock.likes.indexOf(req.ip) == -1)
+              if(!Array.isArray(stock.likes)) stock.likes = [];
+              if(like && stock.likes.indexOf(req.clientIp) == -1)
                 {
-                  stock.likes.push(req.ip);
+                  stock.likes.push(req.clientIp);
                   stock.save(function(err, stock){
                     if(err) return res.send('mongodb error');
                     return res.json(stock.toJSON());
                   })
                 }
                 
-              res.json(stock);
+              res.json(stock.toJSON());
               
             });
           })
