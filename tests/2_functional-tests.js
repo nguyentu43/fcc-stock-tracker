@@ -17,6 +17,10 @@ suite('Functional Tests', function() {
     
     suite('GET /api/stock-prices => stockData object', function() {
       
+      before((done) => {
+        setTimeout(() => done(), 1000);
+      });
+      
       test('1 stock', function(done) {
        chai.request(server)
         .get('/api/stock-prices')
@@ -59,18 +63,18 @@ suite('Functional Tests', function() {
       });
       
       test('2 stocks', function(done) {
-//         chai.request(server)
-//         .get('/api/stock-prices')
-//         .query({stock: ['goog', 'msft']})
-//         .end(function(err, res){
+        chai.request(server)
+        .get('/api/stock-prices')
+        .query({stock: ['goog', 'msft']})
+        .end(function(err, res){
           
-//           assert.equal(res.status, 200);
-//           assert.isArray(res.body.stockData);
-//           assert.property(res.body.stockData[0], 'stock', 'GOOG');
-//           assert.property(res.body.stockData[1], 'stock', 'MSFT');
+          assert.equal(res.status, 200);
+          assert.isArray(res.body.stockData);
+          assert.property(res.body.stockData[0], 'stock', 'GOOG');
+          assert.property(res.body.stockData[1], 'stock', 'MSFT');
           
-//           done();
-//         });
+          done();
+        });
       });
       
       test('2 stocks with like', function(done) {
