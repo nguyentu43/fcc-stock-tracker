@@ -47,7 +47,7 @@ function getPrice(symbol)
         else resolve({result: Object.entries(res['Time Series (5min)'])[0][1]["1. open"], name: symbol });
       });
       
-    }, 30 * 1000);
+    }, 20 * 1000);
     
   });
   

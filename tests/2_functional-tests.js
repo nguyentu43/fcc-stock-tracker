@@ -79,14 +79,14 @@ suite('Functional Tests', function() {
         
         chai.request(server)
         .get('/api/stock-prices')
-        .query({stock: ['gool', 'msft'], like: true})
+        .query({stock: ['goog', 'msft'], like: true})
         .end(function(err, res){
           
           assert.equal(res.status, 200);
           assert.isArray(res.body.stockData);
-          assert.property(res.body.stockData[0], 'stock', 'AAPL');
+          assert.property(res.body.stockData[0], 'stock', 'GOOG');
           assert.property(res.body.stockData[0], 'rel_likes', 0);
-          assert.property(res.body.stockData[1], 'stock', 'AMZN');
+          assert.property(res.body.stockData[1], 'stock', 'MSFT');
           assert.property(res.body.stockData[1], 'rel_likes', 0);
           
           done();
