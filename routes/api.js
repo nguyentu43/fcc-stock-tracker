@@ -38,7 +38,7 @@ function getPrice(symbol)
 {
   return request({uri: api + '&symbol=' + symbol, json: true}).then((res) => {
     if(res['Error Message'])
-      return {result: false, stock: symbol};
+      return {result: false, name: symbol};
     else {
       return {result: Object.entries(res['Time Series (5min)'])[0][1]["1. open"], name: symbol };
     }
@@ -46,7 +46,7 @@ function getPrice(symbol)
 }
 
 function getStockAndLike(data, like, req){
-  Stock.findOneAndUpdate({stock: data.name}, { $set: { price: data.result, likes: [] }}, {new: true, upsert: true})
+  return Stock.findOneAndUpdate({stock: data.name}, { $set: { price: data.result, likes: [] }}, {new: true, upsert: true})
   .then((stock) => {
     if(like && stock.likes.indexOf(req.clientIp) === -1)
       {
@@ -76,23 +76,23 @@ module.exports = function (app) {
               if(!data.result) return res.send('stock not found');
               return getStockAndLike(data, like, req);
             })
-          .then(stock => res.json(stock.toJSON()))
+          .then(stock => res.json(stock))
           .catch((err) => res.send(err.message));
         }
       else 
         {
-          Promise.all(getPrice(stock[0], getPrice(stock[1])))
+          Promise.all([getPrice(stock[0]), getPrice(stock[1])])
           .then(([stock1, stock2]) => {
             
             if(!stock1.result || !stock2.result)
               return res.send('stock not found');
-            return Promise.all(getStockAndLike(stock[0], like), getStockAndLike(stock[1], like));
+            
+            return Promise.all([ getStockAndLike(stock1, like, req), getStockAndLike(stock1, like, req) ]);
+            
           })
           .then(([r_stock1, r_stock2]) => {
-            
-            res.json([r_stock1.toJSON(), r_stock2.toJSON()]);
-            
-          })
+            res.json([r_stock1, r_stock2]);
+          });
         }
     
     });
