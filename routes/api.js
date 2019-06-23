@@ -74,10 +74,9 @@ module.exports = function (app) {
           getPrice(stock[0])
           .then((data) => {
               if(!data.result) return res.send('stock not found');
-              return getStockAndLike(data, like, req);
+              getStockAndLike(data, like, req).then(stock => res.json({stockData: stock}));
             })
-          .then(stock => res.json(stock))
-          .catch((err) => res.send(err.message));
+          .catch(() => res.send('mongodb error'));
         }
       else 
         {
@@ -87,12 +86,17 @@ module.exports = function (app) {
             if(!stock1.result || !stock2.result)
               return res.send('stock not found');
             
-            return Promise.all([ getStockAndLike(stock1, like, req), getStockAndLike(stock1, like, req) ]);
+            Promise.all([ getStockAndLike(stock1, like, req), getStockAndLike(stock2, like, req) ])
+            .then(([result_stock1, result_stock2]) => {
+              res.json({
+                stockData: [
+                  { rel_likes: result_stock1.likes.length - result_stock2.likes.length, stock: result_stock1.stock, price: result_stock1.price },
+                  { rel_likes: result_stock2.likes.length - result_stock1.likes.length, stock: result_stock2.stock, price: result_stock2.price }
+                ]
+              })
+            });
             
           })
-          .then(([r_stock1, r_stock2]) => {
-            res.json([r_stock1, r_stock2]);
-          });
         }
     
     });
