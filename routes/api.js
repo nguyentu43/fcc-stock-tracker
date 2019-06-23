@@ -40,9 +40,21 @@ function getPrice(symbol)
     if(res['Error Message'])
       return {result: false, stock: symbol};
     else {
-      return {result: Object.entries(res['Time Series (5min)'])[0][1]["1. open"], stock: symbol };
+      return {result: Object.entries(res['Time Series (5min)'])[0][1]["1. open"], name: symbol };
     }
   });
+}
+
+function getStockAndLike(stock, like){
+  Stock.findOneAndUpdate({stock}, { $set: { price: data.result, likes: [] }}, {new: true, upsert: true})
+  .then((stock) => {
+    if(like && stock.likes.indexOf(req.clientIp) == -1)
+      {
+        stock.likes.push(req.clientIp);
+        return stock.save();
+      }
+    else
+      return stock;
 }
 
 module.exports = function (app) {
@@ -60,21 +72,11 @@ module.exports = function (app) {
         {
           getPrice(stock[0])
           .then((data) => {
-            if(!data.result) return res.send('stock not found');
-            
-            Stock.findOneAndUpdate({stock: stock[0]}, { $set: { price: data.result, likes: [] }}, {new: true, upsert: true}, function(err, stock){
-              
-              if(err) return res.send('mongodb error');
-              if(like && stock.likes.indexOf(req.clientIp) == -1)
-                {
-                  stock.likes.push(req.clientIp);
-                  stock.save(function(err, stock){
-                    if(err) return res.send('mongodb error');
-                    return res.json(stock.toJSON());
-                  })
-                }
-              else res.json(stock.toJSON());
-            });
+              if(!data.result) return res.send('stock not found');
+              return getStock(stock[0], like);
+            })
+            .then(stock => res.json(stock.toJSON()))
+            .catch(() => res.send('mongodb error'));
           })
         }
       else 
@@ -84,9 +86,9 @@ module.exports = function (app) {
             
             if(!stock1.result || !stock2.result)
               return res.send('stock not found');
-            
-            Stock.findOneAndUpdate({})
+            return Promise.all(getStock(stock[0], like), getStock(stock[1], like));
           })
+          .then(([stock1, r_stock2]))
         }
     
     });
