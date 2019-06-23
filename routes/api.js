@@ -21,8 +21,14 @@ const schema = mongoose.Schema({
     required: true
   },
   price: Number,
-  likes [ String ]
+  likes: [ String ]
 });
+
+schema.methods.toJSON = function(){
+  const obj = this.toObject();
+  obj.likes = obj.likes.length;
+  return obj;
+}
 
 const Stock = mongoose.model('Stock', schema);
 
@@ -44,7 +50,7 @@ module.exports = function (app) {
   app.route('/api/stock-prices')
     .get(function (req, res){
     
-      if(!req.body.stock) res.send('stock required');
+      if(!req.query.stock) res.send('stock required');
     
       let stock = Array.isArray(req.query.stock) ? req.query.stock : [req.query.stock];
       const like = req.query.like === 'true' ? true : false;
@@ -53,11 +59,25 @@ module.exports = function (app) {
       if(stock.length == 1)
         {
           getPrice(stock[0])
-          .then()
-          Stock.findOne({stock: stock[0]}, function(err, stock){
-            if(err) return res.send('mongodb error');
+          .then((data) => {
+            if(!data.result) return res.send('stock not found');
             
-          });
+            Stock.findOneAndUpdate({stock: stock[0]}, { $set: { price: res.result } }, {upsert: true}, function(err, stock){
+              
+              if(err) return res.send('mongodb error');
+              if(like && stock.likes.indexOf(req.ip) == -1)
+                {
+                  stock.likes.push(req.ip);
+                  stock.save(function(err, stock){
+                    if(err) return res.send('mongodb error');
+                    return res.json(stock.toJSON());
+                  })
+                }
+                
+              res.json(stock);
+              
+            });
+          })
         }
       else 
         {
