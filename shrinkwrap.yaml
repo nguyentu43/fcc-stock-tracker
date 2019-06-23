@@ -7,6 +7,8 @@ dependencies:
   helmet: 3.18.0
   mocha: 6.1.4
   mongodb: 3.2.7
+  request: 2.88.0
+  request-promise: 4.2.4
   zombie: 6.1.4
 packages:
   /@types/chai/4.1.7:
@@ -1641,6 +1643,16 @@ packages:
     dev: false
     resolution:
       integrity: sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
+  /request-promise-core/1.1.2:
+    dependencies:
+      lodash: 4.17.11
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    peerDependencies:
+      request: ^2.34
+    resolution:
+      integrity: sha512-UHYyq1MO8GsefGEt7EprS8UrXsm1TxEvFUX1IMTuSLU2Rh7fTIdFtl8xD7JiEYiWU2dl+NYAjCTksTehQUxPag==
   /request-promise-core/1.1.2/request@2.88.0:
     dependencies:
       lodash: 4.17.11
@@ -1667,6 +1679,19 @@ packages:
       request: ^2.34
     resolution:
       integrity: sha512-rIMnbBdgNViL37nZ1b3L/VfPOpSi0TqVDQPAvO6U14lMzOLrt5nilxCQqtDKhZeDiW0/hkCXGoQjhgJd/tCh6w==
+  /request-promise/4.2.4:
+    dependencies:
+      bluebird: 3.5.5
+      request-promise-core: 1.1.2
+      stealthy-require: 1.1.1
+      tough-cookie: 2.5.0
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    peerDependencies:
+      request: ^2.34
+    resolution:
+      integrity: sha512-8wgMrvE546PzbR5WbYxUQogUnUDfM0S7QIFZMID+J73vdFARkFy+HElj4T+MWYhpXwlLp0EQ8Zoj8xUA0he4Vg==
   /request/2.88.0:
     dependencies:
       aws-sign2: 0.7.0
@@ -2266,4 +2291,6 @@ specifiers:
   helmet: ^3.18.0
   mocha: ^6.1.4
   mongodb: ^3.2.6
+  request: ^2.88.0
+  request-promise: ^4.2.4
   zombie: ^6.1.4

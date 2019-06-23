@@ -13,9 +13,11 @@ var runner            = require('./test-runner');
 var app = express();
 
 app.use(helmet.contentSecurityPolicy({
-  defaultSrc: ["'self'"],
-  styleSrc: ["'self'"],
-  scriptSrc: ["'self'"]
+  directives: {
+    defaultSrc: ["'self'"],
+    styleSrc: ["'self'"],
+    scriptSrc: ["'self'"]
+  }
 }));
 
 app.use('/public', express.static(process.cwd() + '/public'));

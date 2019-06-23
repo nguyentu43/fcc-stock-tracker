@@ -15,7 +15,9 @@
     "chai-http": "^4.3.0",
     "mocha": "^6.1.4",
     "zombie": "^6.1.4",
-    "helmet": "^3.18.0"
+    "helmet": "^3.18.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   },
   "engines": {
     "node": "8.x"
